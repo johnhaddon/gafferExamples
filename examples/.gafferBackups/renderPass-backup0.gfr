@@ -1,0 +1,65 @@
+import Gaffer
+import GafferDispatch
+import GafferExamples
+import GafferImage
+import GafferScene
+import IECore
+import imath
+
+Gaffer.Metadata.registerNodeValue( parent, "serialiser:milestoneVersion", 0, persistent=False )
+Gaffer.Metadata.registerNodeValue( parent, "serialiser:majorVersion", 45, persistent=False )
+Gaffer.Metadata.registerNodeValue( parent, "serialiser:minorVersion", 3, persistent=False )
+Gaffer.Metadata.registerNodeValue( parent, "serialiser:patchVersion", 0, persistent=False )
+
+__children = {}
+
+parent["variables"].addChild( Gaffer.CompoundDataPlug.MemberPlug( "imageCataloguePort", flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+parent["variables"]["imageCataloguePort"].addChild( Gaffer.StringPlug( "name", defaultValue = 'image:catalogue:port', flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+parent["variables"]["imageCataloguePort"].addChild( Gaffer.IntPlug( "value", defaultValue = 0, flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+parent["variables"].addChild( Gaffer.CompoundDataPlug.MemberPlug( "projectName", flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+parent["variables"]["projectName"].addChild( Gaffer.StringPlug( "name", defaultValue = 'project:name', flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+parent["variables"]["projectName"].addChild( Gaffer.StringPlug( "value", defaultValue = 'default', flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+parent["variables"].addChild( Gaffer.CompoundDataPlug.MemberPlug( "projectRootDirectory", flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+parent["variables"]["projectRootDirectory"].addChild( Gaffer.StringPlug( "name", defaultValue = 'project:rootDirectory', flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+parent["variables"]["projectRootDirectory"].addChild( Gaffer.StringPlug( "value", defaultValue = '$HOME/gaffer/projects/${project:name}', flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+__children["defaultFormat"] = GafferImage.FormatPlug( "defaultFormat", defaultValue = GafferImage.Format( 1920, 1080, 1.000 ), flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, )
+parent.addChild( __children["defaultFormat"] )
+__children["RenderPass"] = GafferExamples.RenderPass( "RenderPass" )
+parent.addChild( __children["RenderPass"] )
+__children["RenderPass"].addChild( Gaffer.V2fPlug( "__uiPosition", defaultValue = imath.V2f( 0, 0 ), flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+__children["Sphere"] = GafferScene.Sphere( "Sphere" )
+parent.addChild( __children["Sphere"] )
+__children["Sphere"].addChild( Gaffer.V2fPlug( "__uiPosition", defaultValue = imath.V2f( 0, 0 ), flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+__children["Camera"] = GafferScene.Camera( "Camera" )
+parent.addChild( __children["Camera"] )
+__children["Camera"].addChild( Gaffer.V2fPlug( "__uiPosition", defaultValue = imath.V2f( 0, 0 ), flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+__children["Group"] = GafferScene.Group( "Group" )
+parent.addChild( __children["Group"] )
+__children["Group"]["in"].addChild( GafferScene.ScenePlug( "in1", flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+__children["Group"]["in"].addChild( GafferScene.ScenePlug( "in2", flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+__children["Group"].addChild( Gaffer.V2fPlug( "__uiPosition", defaultValue = imath.V2f( 0, 0 ), flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+__children["StandardOptions"] = GafferScene.StandardOptions( "StandardOptions" )
+parent.addChild( __children["StandardOptions"] )
+__children["StandardOptions"].addChild( Gaffer.V2fPlug( "__uiPosition", defaultValue = imath.V2f( 0, 0 ), flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic, ) )
+parent["variables"]["imageCataloguePort"]["value"].setValue( 37811 )
+Gaffer.Metadata.registerPlugValue( parent["variables"]["imageCataloguePort"], 'readOnly', True )
+Gaffer.Metadata.registerPlugValue( parent["variables"]["projectName"]["name"], 'readOnly', True )
+Gaffer.Metadata.registerPlugValue( parent["variables"]["projectRootDirectory"]["name"], 'readOnly', True )
+__children["RenderPass"]["task"].setInput( __children["RenderPass"]["__postProcess"]["task"] )
+__children["RenderPass"]["in"].setInput( __children["StandardOptions"]["out"] )
+__children["RenderPass"]["passName"].setValue( 'test' )
+__children["RenderPass"]["__uiPosition"].setValue( imath.V2f( 4.84080029, -9.56954002 ) )
+__children["Sphere"]["__uiPosition"].setValue( imath.V2f( -1.66497445, 14.9226475 ) )
+__children["Camera"]["transform"]["translate"].setValue( imath.V3f( 0, 0, 4.1519866 ) )
+__children["Camera"]["__uiPosition"].setValue( imath.V2f( 11.3350258, 14.9226475 ) )
+__children["Group"]["in"]["in0"].setInput( __children["Sphere"]["out"] )
+__children["Group"]["in"]["in1"].setInput( __children["Camera"]["out"] )
+__children["Group"]["__uiPosition"].setValue( imath.V2f( 6.33614588, 6.75858498 ) )
+__children["StandardOptions"]["in"].setInput( __children["Group"]["out"] )
+__children["StandardOptions"]["options"]["renderCamera"]["value"].setValue( '/group/camera' )
+__children["StandardOptions"]["options"]["renderCamera"]["enabled"].setValue( True )
+__children["StandardOptions"]["__uiPosition"].setValue( imath.V2f( 6.33892488, -1.40547788 ) )
+
+
+del __children
+

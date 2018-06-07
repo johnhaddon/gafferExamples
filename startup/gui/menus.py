@@ -1,3 +1,4 @@
+import GafferUI
 import GafferExamples
 import GafferExamplesUI
 

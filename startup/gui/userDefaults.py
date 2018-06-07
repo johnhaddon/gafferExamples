@@ -1,4 +1,5 @@
 import imath
+import Gaffer
 import GafferScene
 
 # User defaults are applied automatically whenever a node is created by the user through the UI.

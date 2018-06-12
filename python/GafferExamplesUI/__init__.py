@@ -1,1 +1,2 @@
 import RenderPassUI
+from CustomViewerWidget import CustomViewerWidget
